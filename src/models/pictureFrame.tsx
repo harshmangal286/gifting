@@ -10,13 +10,14 @@ import {
   SRGBColorSpace,
   Vector3,
   DoubleSide,
+  Color,
+  Mesh,
 } from "three";
 
 type PictureFrameProps = ThreeElements["group"] & {
   image: string;
   imageScale?: number | [number, number];
   imageOffset?: [number, number, number];
-  imageInset?: number;
 };
 
 const DEFAULT_IMAGE_SCALE: [number, number] = [0.82, 0.82];
@@ -25,7 +26,6 @@ export function PictureFrame({
   image,
   imageScale = DEFAULT_IMAGE_SCALE,
   imageOffset,
-  imageInset = 0.01,
   children,
   ...groupProps
 }: PictureFrameProps) {
@@ -40,7 +40,24 @@ export function PictureFrame({
       : 1;
   pictureTexture.anisotropy = maxAnisotropy;
 
-  const frameScene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
+  const frameScene = useMemo(() => {
+    const cloned = gltf.scene.clone(true);
+
+    // Apply soft, mature colors to frame materials
+    cloned.traverse((child) => {
+      if (child instanceof Mesh && child.material) {
+        const material = child.material as MeshStandardMaterial;
+        if (material.isMeshStandardMaterial) {
+          // Dusty rose/soft mauve tones for frame
+          material.color = new Color(0xc9b1b1); // soft mauve
+          material.roughness = 0.6;
+          material.metalness = 0.1;
+        }
+      }
+    });
+
+    return cloned;
+  }, [gltf.scene]);
 
   const { frameSize, frameCenter } = useMemo(() => {
     const box = new Box3().setFromObject(frameScene);
@@ -79,7 +96,7 @@ export function PictureFrame({
     () =>
       new MeshStandardMaterial({
         map: pictureTexture,
-        roughness: 0.08,
+        roughness: 0.15,
         metalness: 0,
         side: DoubleSide,
       }),
@@ -95,11 +112,15 @@ export function PictureFrame({
   return (
     <group {...groupProps}>
       <group rotation={[0.04, 0, 0]}>
-      <primitive object={frameScene} />
-      <mesh position={imagePosition} rotation={[0.435, Math.PI, 0]} material={pictureMaterial}>
-        <planeGeometry args={[imageWidth, imageHeight]} />
-      </mesh>
-      {children}
+        <primitive object={frameScene} />
+        <mesh
+          position={imagePosition}
+          rotation={[0.435, Math.PI, 0]}
+          material={pictureMaterial}
+        >
+          <planeGeometry args={[imageWidth, imageHeight]} />
+        </mesh>
+        {children}
       </group>
     </group>
   );

@@ -1,0 +1,57 @@
+.falling-petals-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.petal {
+  position: absolute;
+  top: -100px;
+  animation: fall linear infinite;
+  will-change: transform, opacity;
+}
+
+.petal.flower {
+  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 1)) 
+          drop-shadow(0 0 25px rgba(255, 182, 193, 0.9));
+  opacity: 0.95;
+}
+
+.petal.milkybar {
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1)) 
+          drop-shadow(0 0 40px rgba(135, 206, 250, 1))
+          drop-shadow(0 0 50px rgba(255, 255, 255, 0.8));
+  opacity: 1;
+  animation: fall linear infinite, milkybarSpin 2.5s linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) translateX(0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(50px) rotate(var(--rotation)) scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes milkybarSpin {
+  0% {
+    transform: perspective(100px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(100px) rotateY(360deg);
+  }
+}

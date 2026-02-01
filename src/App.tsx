@@ -17,6 +17,7 @@ import { Table } from "./models/table";
 import { PictureFrame } from "./models/pictureFrame";
 import { Fireworks } from "./components/Fireworks";
 import { BirthdayCard } from "./components/BirthdayCard";
+import { FallingPetals } from "./components/FallingPetals";
 
 import "./App.css";
 
@@ -40,16 +41,16 @@ type AnimatedSceneProps = {
 
 const CAKE_START_Y = 10;
 const CAKE_END_Y = 0;
-const CAKE_DESCENT_DURATION = 3;
+const CAKE_DESCENT_DURATION = 4;
 
 const TABLE_START_Z = 30;
 const TABLE_END_Z = 0;
-const TABLE_SLIDE_DURATION = 0.7;
+const TABLE_SLIDE_DURATION = 1.0;
 const TABLE_SLIDE_START = CAKE_DESCENT_DURATION - TABLE_SLIDE_DURATION - 0.1;
 
 const CANDLE_START_Y = 5;
 const CANDLE_END_Y = 0;
-const CANDLE_DROP_DURATION = 1.2;
+const CANDLE_DROP_DURATION = 1.6;
 const CANDLE_DROP_START =
   Math.max(CAKE_DESCENT_DURATION, TABLE_SLIDE_START + TABLE_SLIDE_DURATION) +
   1.0;
@@ -58,7 +59,7 @@ const totalAnimationTime = CANDLE_DROP_START + CANDLE_DROP_DURATION;
 
 const ORBIT_TARGET = new Vector3(0, 1, 0);
 const ORBIT_INITIAL_RADIUS = 3;
-const ORBIT_INITIAL_HEIGHT = 1;
+const ORBIT_INITIAL_HEIGHT = 1.5;
 const ORBIT_INITIAL_AZIMUTH = Math.PI / 2;
 const ORBIT_MIN_DISTANCE = 2;
 const ORBIT_MAX_DISTANCE = 8;
@@ -77,17 +78,11 @@ const BACKGROUND_FADE_START = Math.max(
 );
 
 const TYPED_LINES = [
-  "> tina",
-  "...",
-  "> today is your birthday",
-  "...",
-  "> so i made you this computer program",
-  "...",
-  "٩(◕‿◕)۶ ٩(◕‿◕)۶ ٩(◕‿◕)۶"
+  "There's something meant just for you.Aishi!!"
 ];
-const TYPED_CHAR_DELAY = 100;
-const POST_TYPING_SCENE_DELAY = 1000;
-const CURSOR_BLINK_INTERVAL = 480;
+const TYPED_CHAR_DELAY = 50; // Reduced from 150ms to 50ms
+const POST_TYPING_SCENE_DELAY = 500; // Reduced from 2000ms to 500ms
+const CURSOR_BLINK_INTERVAL = 600;
 
 type BirthdayCardConfig = {
   id: string;
@@ -99,7 +94,7 @@ type BirthdayCardConfig = {
 const BIRTHDAY_CARDS: ReadonlyArray<BirthdayCardConfig> = [
   {
     id: "confetti",
-    image: "/card.png",
+    image: "/aishi_card.png",
     position: [1, 0.081, -2],
     rotation: [-Math.PI / 2 , 0, Math.PI / 3],
   }
@@ -267,27 +262,27 @@ function AnimatedScene({
         <Table />
         <PictureFrame
           image="/frame2.jpg"
-          position={[0, 0.735, 3]}
+          position={[0.5, 0.735, 3]}
           rotation={[0, 5.6, 0]}
-          scale={0.75}
+          scale={1}
         />
         <PictureFrame
           image="/frame3.jpg"
-          position={[0, 0.735, -3]}
+          position={[0.5, 0.735, -3]}
           rotation={[0, 4.0, 0]}
-          scale={0.75}
+          scale={1}
         />
         <PictureFrame
           image="/frame4.jpg"
-          position={[-1.5, 0.735, 2.5]}
+          position={[-1, 0.735, 2.5]}
           rotation={[0, 5.4, 0]}
-          scale={0.75}
+          scale={1}
         />
         <PictureFrame
           image="/frame1.jpg"
-          position={[-1.5, 0.735, -2.5]}
+          position={[-1, 0.735, -2.5]}
           rotation={[0, 4.2, 0]}
-          scale={0.75}
+          scale={1}
         />
         {cards.map((card) => (
           <BirthdayCard
@@ -305,7 +300,7 @@ function AnimatedScene({
         <Cake />
       </group>
       <group ref={candleGroup}>
-        <Candle isLit={candleLit} scale={0.25} position={[0, 1.1, 0]} />
+        <Candle isLit={candleLit} scale={0.25} position={[0, 1.6, 0]} />
       </group>
     </>
   );
@@ -377,8 +372,10 @@ export default function App() {
   const [hasAnimationCompleted, setHasAnimationCompleted] = useState(false);
   const [isCandleLit, setIsCandleLit] = useState(true);
   const [fireworksActive, setFireworksActive] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const audio = new Audio("/music.mp3");
@@ -500,6 +497,46 @@ export default function App() {
       if (hasAnimationCompleted && isCandleLit) {
         setIsCandleLit(false);
         setFireworksActive(true);
+        
+        // Pause background music when video is about to play
+        const audio = backgroundAudioRef.current;
+        if (audio) {
+          audio.pause();
+        }
+        
+        // Trigger video after a short delay
+        setTimeout(() => {
+          setShowVideo(true);
+          
+          // Wait for video element to be rendered
+          setTimeout(() => {
+            const video = videoRef.current;
+            if (video) {
+              // Ensure video is ready
+              video.muted = false;
+              video.volume = 1.0;
+              
+              // Try to play with better error handling
+              const playPromise = video.play();
+              
+              if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                    console.log('Video playing successfully');
+                  })
+                  .catch(err => {
+                    console.error('Video play error:', err);
+                    // Show controls as fallback
+                    video.controls = true;
+                    video.muted = true;
+                    video.play().catch(() => {
+                      console.error('Even muted autoplay failed');
+                    });
+                  });
+              }
+            }
+          }, 100);
+        }, 800);
       }
     };
 
@@ -515,11 +552,16 @@ export default function App() {
 
   return (
     <div className="App">
+      {(!hasStarted || !sceneStarted) && <FallingPetals />}
+      
       <div
         className="background-overlay"
         style={{ opacity: backgroundOpacity }}
       >
         <div className="typed-text">
+          <div className="intro-image-container">
+            <img src="/intro_image.jpg" alt="For you" className="intro-image" />
+          </div>
           {typedLines.map((line, index) => {
             const showCursor =
               cursorVisible &&
@@ -538,14 +580,56 @@ export default function App() {
           })}
         </div>
       </div>
-      {hasAnimationCompleted && isCandleLit && (
-        <div className="hint-overlay">press space to blow out the candle</div>
+      
+      {!hasStarted && (
+        <div className="start-instruction">Press Space to Begin</div>
       )}
+      
+      {hasAnimationCompleted && isCandleLit && (
+        <>
+          <div className="hint-overlay">press space to blow out the candle</div>
+          <div className="card-hint">💌 click the card on the table</div>
+        </>
+      )}
+      
+      {showVideo && (
+        <>
+          <div className={`video-overlay ${showVideo ? 'show' : ''}`} />
+          <div className={`video-container ${showVideo ? 'show' : ''}`}>
+            <video 
+              ref={videoRef}
+              preload="auto"
+              playsInline
+              webkit-playsinline="true"
+            >
+              <source src="/friends_video.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div className={`birthday-message ${showVideo ? 'show' : ''}`}>
+            <h2>Happy Birthday, Aishi</h2>
+            <p>A presence that feels like relief.</p>
+          </div>
+        </>
+      )}
+      
       <Canvas
-        gl={{ alpha: true }}
-        style={{ background: "transparent" }}
-        onCreated={({ gl }) => {
-          gl.setClearColor("#000000", 0);
+        gl={{ 
+          alpha: false,
+          antialias: true,
+          preserveDrawingBuffer: true
+        }}
+        style={{ 
+          background: 'linear-gradient(135deg, #f5e6d3 0%, #d4a5a5 50%, #c9b1b1 100%)',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 1
+        }}
+        onCreated={({ gl, scene }) => {
+          gl.setClearColor("#d4a5a5", 1);
+          scene.background = null;
         }}
       >
         <Suspense fallback={null}>
@@ -559,17 +643,27 @@ export default function App() {
             activeCardId={activeCardId}
             onToggleCard={handleCardToggle}
           />
-          <ambientLight intensity={(1 - environmentProgress) * 0.8} />
-          <directionalLight intensity={0.5} position={[2, 10, 0]} color={[1, 0.9, 0.95]}/>
+          <ambientLight intensity={(1 - environmentProgress) * 0.6 + 0.4} color="#f5e6d3" />
+          <directionalLight 
+            intensity={0.5} 
+            position={[2, 10, 0]} 
+            color="#d4a5a5"
+          />
+          <pointLight 
+            position={[0, 2, 0]} 
+            intensity={0.4} 
+            color="#c9b1b1" 
+            distance={5}
+          />
           <Environment
-            files={["/shanghai_bund_4k.hdr"]}
+            files={["/test.hdr"]}
             backgroundRotation={[0, 3.3, 0]}
             environmentRotation={[0, 3.3, 0]}
             background
-            environmentIntensity={0.1 * environmentProgress}
-            backgroundIntensity={0.05 * environmentProgress}
+            environmentIntensity={0.08 * environmentProgress + 0.02}
+            backgroundIntensity={0.03 * environmentProgress + 0.01}
           />
-          <EnvironmentBackgroundController intensity={0.05 * environmentProgress} />
+          <EnvironmentBackgroundController intensity={0.03 * environmentProgress + 0.01} />
           <Fireworks isActive={fireworksActive} origin={[0, 10, 0]} />
           <ConfiguredOrbitControls />
         </Suspense>
