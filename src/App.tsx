@@ -63,8 +63,8 @@ const ORBIT_INITIAL_HEIGHT = 1.5;
 const ORBIT_INITIAL_AZIMUTH = Math.PI / 2;
 const ORBIT_MIN_DISTANCE = 2;
 const ORBIT_MAX_DISTANCE = 8;
-const ORBIT_MIN_POLAR = Math.PI * 0;
-const ORBIT_MAX_POLAR = Math.PI / 2;
+const ORBIT_MIN_POLAR = Math.PI * 0.1;
+const ORBIT_MAX_POLAR = Math.PI * 0.7;
 
 const BACKGROUND_FADE_DURATION = 1;
 const BACKGROUND_FADE_OFFSET = 0;
@@ -556,7 +556,12 @@ export default function App() {
       
       <div
         className="background-overlay"
-        style={{ opacity: backgroundOpacity }}
+        style={{
+          opacity: backgroundOpacity,
+          backgroundImage: 'url(/sunflower.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
       >
         <div className="typed-text">
           <div className="intro-image-container">
@@ -594,9 +599,20 @@ export default function App() {
       
       {showVideo && (
         <>
-          <div className={`video-overlay ${showVideo ? 'show' : ''}`} />
+          <div className={`video-overlay ${showVideo ? 'show' : ''}`}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              webkit-playsinline="true"
+              className="overlay-video"
+            >
+              <source src="/disney.mp4" type="video/mp4" />
+            </video>
+          </div>
           <div className={`video-container ${showVideo ? 'show' : ''}`}>
-            <video 
+            <video
               ref={videoRef}
               preload="auto"
               playsInline

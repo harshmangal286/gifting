@@ -11,7 +11,7 @@ interface Petal {
   type: 'milkybar' | 'flower';
 }
 
-const FLOWER_EMOJIS = ['🌸', '🌺', '🌼', '🌻'];
+const FLOWER_EMOJIS = ['🌸', '🌺', '🌼', '🌻', '🌷'];
 
 export function FallingPetals() {
   const [petals, setPetals] = useState<Petal[]>([]);

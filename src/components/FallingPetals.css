@@ -17,15 +17,10 @@
 }
 
 .petal.flower {
-  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 1)) 
-          drop-shadow(0 0 25px rgba(255, 182, 193, 0.9));
   opacity: 0.95;
 }
 
 .petal.milkybar {
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1)) 
-          drop-shadow(0 0 40px rgba(135, 206, 250, 1))
-          drop-shadow(0 0 50px rgba(255, 255, 255, 0.8));
   opacity: 1;
   animation: fall linear infinite, milkybarSpin 2.5s linear infinite;
 }
