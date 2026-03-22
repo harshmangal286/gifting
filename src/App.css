@@ -299,8 +299,9 @@ canvas {
   transform: translateX(-50%);
   text-align: center;
   opacity: 0;
+  visibility: hidden;
   z-index: 1002;
-  transition: opacity 1.2s ease 1s;
+  transition: opacity 1.2s ease 1s, visibility 1.2s ease 1s;
   font-weight: 300;
   letter-spacing: 1.5px;
   pointer-events: none;
@@ -313,6 +314,7 @@ canvas {
 
 .birthday-message.show {
   opacity: 1;
+  visibility: visible;
 }
 
 .birthday-message h2 {
