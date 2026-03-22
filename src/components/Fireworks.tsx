@@ -43,6 +43,7 @@ export function Fireworks({ isActive, origin = [0, 10, 0] }: FireworksProps) {
   useFrame((_, delta) => {
     if (!meshRef.current || !isActive) return;
 
+    const mesh = meshRef.current;
     petals.current.forEach((petal, i) => {
       petal.life += delta;
 
@@ -68,13 +69,13 @@ export function Fireworks({ isActive, origin = [0, 10, 0] }: FireworksProps) {
       dummy.scale.setScalar(petal.scale);
       dummy.updateMatrix();
 
-      meshRef.current.setMatrixAt(i, dummy.matrix);
-      meshRef.current.setColorAt(i, new Color(0xd4a5a5).multiplyScalar(opacity));
+      mesh.setMatrixAt(i, dummy.matrix);
+      mesh.setColorAt(i, new Color(0xd4a5a5).multiplyScalar(opacity));
     });
 
-    meshRef.current.instanceMatrix.needsUpdate = true;
-    if (meshRef.current.instanceColor) {
-      meshRef.current.instanceColor.needsUpdate = true;
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) {
+      mesh.instanceColor.needsUpdate = true;
     }
   });
 
