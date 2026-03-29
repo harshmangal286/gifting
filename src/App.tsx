@@ -18,6 +18,7 @@ import { PictureFrame } from "./models/pictureFrame";
 import { Fireworks } from "./components/Fireworks";
 import { BirthdayCard } from "./components/BirthdayCard";
 import { FallingPetals } from "./components/FallingPetals";
+import { assetUrl } from "./utils/assetUrl";
 
 import "./App.css";
 
@@ -94,7 +95,7 @@ type BirthdayCardConfig = {
 const BIRTHDAY_CARDS: ReadonlyArray<BirthdayCardConfig> = [
   {
     id: "confetti",
-    image: "/aishi_card.png",
+    image: assetUrl("/aishi_card.png"),
     position: [1, 0.081, -2],
     rotation: [-Math.PI / 2 , 0, Math.PI / 3],
   }
@@ -261,25 +262,25 @@ function AnimatedScene({
       <group ref={tableGroup}>
         <Table />
         <PictureFrame
-          image="/frame2.jpg"
+          image={assetUrl("/frame2.jpg")}
           position={[0.5, 0.735, 3]}
           rotation={[0, 5.6, 0]}
           scale={1}
         />
         <PictureFrame
-          image="/frame3.jpg"
+          image={assetUrl("/frame3.jpg")}
           position={[0.5, 0.735, -3]}
           rotation={[0, 4.0, 0]}
           scale={1}
         />
         <PictureFrame
-          image="/frame4.jpg"
+          image={assetUrl("/frame4.jpg")}
           position={[-1, 0.735, 2.5]}
           rotation={[0, 5.4, 0]}
           scale={1}
         />
         <PictureFrame
-          image="/frame1.jpg"
+          image={assetUrl("/frame1.jpg")}
           position={[-1, 0.735, -2.5]}
           rotation={[0, 4.2, 0]}
           scale={1}
@@ -378,7 +379,7 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio("/music.mp3");
+    const audio = new Audio(assetUrl("/music.mp3"));
     audio.loop = true;
     audio.preload = "auto";
     backgroundAudioRef.current = audio;
@@ -528,14 +529,14 @@ export default function App() {
         className="background-overlay"
         style={{
           opacity: backgroundOpacity,
-          backgroundImage: 'url(/sunflower.jpg)',
+          backgroundImage: `url(${assetUrl("/sunflower.jpg")})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
         <div className="typed-text">
           <div className="intro-image-container">
-            <img src="/intro_image.jpg" alt="For you" className="intro-image" />
+            <img src={assetUrl("/intro_image.jpg")} alt="For you" className="intro-image" />
           </div>
           {typedLines.map((line, index) => {
             const showCursor =
@@ -571,7 +572,7 @@ export default function App() {
         <>
           <div className={`video-overlay ${showVideo ? 'show' : ''}`}>
             <img
-              src="/disney.jpg"
+              src={assetUrl("/disney.jpg")}
               alt="overlay"
               className="overlay-video"
             />
@@ -585,7 +586,7 @@ export default function App() {
               autoPlay
               muted={false}
             >
-              <source src="/friends_video.mp4" type="video/mp4" />
+              <source src={assetUrl("/friends_video.mp4")} type="video/mp4" />
             </video>
           </div>
           <div className={`birthday-message ${showVideo ? 'show' : ''}`}>
@@ -639,7 +640,7 @@ export default function App() {
             distance={5}
           />
           <Environment
-            files={["/test.hdr"]}
+            files={[assetUrl("/test.hdr")]}
             backgroundRotation={[0, 3.3, 0]}
             environmentRotation={[0, 3.3, 0]}
             background

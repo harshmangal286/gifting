@@ -13,6 +13,7 @@ import {
   Color,
   Mesh,
 } from "three";
+import { assetUrl } from "../utils/assetUrl";
 
 type PictureFrameProps = ThreeElements["group"] & {
   image: string;
@@ -30,7 +31,7 @@ export function PictureFrame({
   ...groupProps
 }: PictureFrameProps) {
   const { gl } = useThree();
-  const gltf = useLoader(GLTFLoader, "/picture_frame.glb");
+  const gltf = useLoader(GLTFLoader, assetUrl("/picture_frame.glb"));
   const pictureTexture = useTexture(image);
 
   pictureTexture.colorSpace = SRGBColorSpace;
