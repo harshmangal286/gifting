@@ -18,7 +18,7 @@ import { PictureFrame } from "./models/pictureFrame";
 import { Fireworks } from "./components/Fireworks";
 import { BirthdayCard } from "./components/BirthdayCard";
 import { FallingPetals } from "./components/FallingPetals";
-import { DestinationCarousel } from "./components/DestinationCarousel";
+import { ModernCarousel } from "./components/ModernCarousel";
 import { assetUrl } from "./utils/assetUrl";
 
 import "./App.css";
@@ -545,7 +545,7 @@ export default function App() {
 
   // If carousel is active, show it full screen
   if (showCarousel) {
-    return <DestinationCarousel />;
+    return <ModernCarousel />;
   }
 
   return (
