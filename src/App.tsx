@@ -484,6 +484,27 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (showVideo && videoRef.current) {
+      const video = videoRef.current;
+      video.muted = false;
+      video.volume = 1.0;
+
+      // Start playing immediately without delay
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.error('Video play error:', err);
+          // Fallback: try with muted
+          video.muted = true;
+          video.play().catch(() => {
+            console.error('Fallback play failed');
+          });
+        });
+      }
+    }
+  }, [showVideo]);
+
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code !== "Space" && event.key !== " ") {
         return;
@@ -497,43 +518,15 @@ export default function App() {
       if (hasAnimationCompleted && isCandleLit) {
         setIsCandleLit(false);
         setFireworksActive(true);
-        
+
         // Pause background music when video is about to play
         const audio = backgroundAudioRef.current;
         if (audio) {
           audio.pause();
         }
-        
-        // Trigger video after a short delay
-        setTimeout(() => {
-          setShowVideo(true);
 
-          // Wait for video element to be rendered and preloaded
-          setTimeout(() => {
-            const video = videoRef.current;
-            if (video) {
-              video.muted = false;
-              video.volume = 1.0;
-
-              const playPromise = video.play();
-
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    console.log('Video playing successfully');
-                  })
-                  .catch(err => {
-                    console.error('Video play error:', err);
-                    video.controls = true;
-                    video.muted = true;
-                    video.play().catch(() => {
-                      console.error('Even muted autoplay failed');
-                    });
-                  });
-              }
-            }
-          }, 200);
-        }, 800);
+        // Show video immediately
+        setShowVideo(true);
       }
     };
 
@@ -611,9 +604,11 @@ export default function App() {
           <div className={`video-container ${showVideo ? 'show' : ''}`}>
             <video
               ref={videoRef}
-              preload="auto"
+              preload="metadata"
               playsInline
               webkit-playsinline="true"
+              autoPlay
+              muted={false}
             >
               <source src="/friends_video.mp4" type="video/mp4" />
             </video>
