@@ -7,3 +7,14 @@
   to = "/index.html"
   status = 200
   force = false
+  conditions = { NOT = ["{path}"] }
+
+[[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+
+[[headers]]
+  for = "/*.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
