@@ -507,18 +507,16 @@ export default function App() {
         // Trigger video after a short delay
         setTimeout(() => {
           setShowVideo(true);
-          
-          // Wait for video element to be rendered
+
+          // Wait for video element to be rendered and preloaded
           setTimeout(() => {
             const video = videoRef.current;
             if (video) {
-              // Ensure video is ready
               video.muted = false;
               video.volume = 1.0;
-              
-              // Try to play with better error handling
+
               const playPromise = video.play();
-              
+
               if (playPromise !== undefined) {
                 playPromise
                   .then(() => {
@@ -526,7 +524,6 @@ export default function App() {
                   })
                   .catch(err => {
                     console.error('Video play error:', err);
-                    // Show controls as fallback
                     video.controls = true;
                     video.muted = true;
                     video.play().catch(() => {
@@ -535,7 +532,7 @@ export default function App() {
                   });
               }
             }
-          }, 100);
+          }, 200);
         }, 800);
       }
     };
