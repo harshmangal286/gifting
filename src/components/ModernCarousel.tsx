@@ -186,18 +186,18 @@ export function ModernCarousel() {
           {/* Navigation Arrows */}
           <motion.button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+            className="fixed left-8 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-white/15 hover:bg-white/30 text-white text-2xl transition-all duration-300 border border-white/20 shadow-lg"
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
           >
             ←
           </motion.button>
 
           <motion.button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+            className="fixed right-8 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-white/15 hover:bg-white/30 text-white text-2xl transition-all duration-300 border border-white/20 shadow-lg"
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
           >
             →
           </motion.button>
@@ -205,7 +205,7 @@ export function ModernCarousel() {
 
         {/* Category Filter */}
         <motion.div
-          className="mt-12 flex gap-2 flex-wrap justify-center"
+          className="fixed bottom-28 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center z-40 bg-black/20 backdrop-blur-sm p-3 rounded-full border border-white/10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -217,8 +217,7 @@ export function ModernCarousel() {
                 setActiveCategory(category);
                 setActiveIndex(0);
               }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 backdrop-blur-sm ${
-                activeCategory === category
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 backdrop-blur-sm ${ activeCategory === category
                   ? 'bg-white text-black shadow-lg'
                   : 'bg-white/10 text-white hover:bg-white/20'
               }`}
@@ -232,7 +231,7 @@ export function ModernCarousel() {
 
         {/* Pagination Dots */}
         <motion.div
-          className="mt-8 flex gap-2 justify-center"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-2 justify-center z-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -244,9 +243,8 @@ export function ModernCarousel() {
                 setActiveIndex(index);
                 setIsAutoPlay(false);
               }}
-              className={`rounded-full transition-all duration-300 ${
-                index === validIndex
-                  ? 'w-8 h-2 bg-white'
+              className={`rounded-full transition-all duration-300 ${ index === validIndex
+                  ? 'w-8 h-2 bg-white shadow-lg'
                   : 'w-2 h-2 bg-white/40 hover:bg-white/60'
               }`}
               whileHover={{ scale: 1.2 }}
@@ -256,7 +254,7 @@ export function ModernCarousel() {
 
         {/* Bottom Controls */}
         <motion.div
-          className="absolute bottom-8 right-8 flex gap-4 z-20"
+          className="fixed bottom-8 right-8 flex gap-4 z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -264,19 +262,20 @@ export function ModernCarousel() {
           {/* AutoPlay Toggle */}
           <motion.button
             onClick={() => setIsAutoPlay(!isAutoPlay)}
-            className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+            className="p-3 rounded-full bg-white/15 hover:bg-white/30 text-white transition-all duration-300 border border-white/20"
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
           >
             {isAutoPlay ? '⏸' : '▶'}
           </motion.button>
 
-          {/* Close/Redirect Button */}
+          {/* Close/Redirect Button - MORE VISIBLE */}
           <motion.button
             onClick={() => window.location.href = '/'}
-            className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.95 }}
+            className="p-3 rounded-full bg-white/15 hover:bg-white/30 text-white transition-all duration-300 border border-white/20 shadow-lg"
+            whileHover={{ scale: 1.15, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
+            title="Go back home"
           >
             ✕
           </motion.button>
@@ -284,12 +283,12 @@ export function ModernCarousel() {
 
         {/* Info Display */}
         <motion.div
-          className="absolute top-8 left-8 z-20 text-white"
+          className="fixed top-8 left-8 z-50 text-white bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <p className="text-sm font-light opacity-75">
+          <p className="text-sm font-light">
             {validIndex + 1} / {filteredDestinations.length || 1}
           </p>
         </motion.div>
