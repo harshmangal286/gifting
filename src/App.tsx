@@ -374,7 +374,6 @@ export default function App() {
   const [fireworksActive, setFireworksActive] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
-  const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -483,26 +482,6 @@ export default function App() {
     return () => window.clearInterval(handle);
   }, []);
 
-  useEffect(() => {
-    if (showVideo && videoRef.current) {
-      const video = videoRef.current;
-      video.muted = false;
-      video.volume = 1.0;
-
-      // Start playing immediately without delay
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          console.error('Video play error:', err);
-          // Fallback: try with muted
-          video.muted = true;
-          video.play().catch(() => {
-            console.error('Fallback play failed');
-          });
-        });
-      }
-    }
-  }, [showVideo]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
