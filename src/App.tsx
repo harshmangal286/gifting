@@ -396,16 +396,19 @@ export default function App() {
     const video = videoRef.current;
     if (!video) return;
 
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
     const handleVideoEnd = () => {
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setShowCarousel(true);
       }, 10000);
-
-      return () => clearTimeout(timer);
     };
 
     video.addEventListener('ended', handleVideoEnd);
-    return () => video.removeEventListener('ended', handleVideoEnd);
+    return () => {
+      video.removeEventListener('ended', handleVideoEnd);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   const playBackgroundMusic = useCallback(() => {
