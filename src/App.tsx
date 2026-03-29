@@ -374,6 +374,7 @@ export default function App() {
   const [fireworksActive, setFireworksActive] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
