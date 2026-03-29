@@ -88,6 +88,10 @@ export function DestinationCarousel() {
     setActiveIndex((prev) => (prev + 1) % DESTINATIONS.length);
   };
 
+  const handleRedirect = () => {
+    window.location.href = '/';
+  };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.changedTouches[0].clientX;
     setIsAutoPlay(false);
@@ -218,6 +222,15 @@ export function DestinationCarousel() {
         title={isAutoPlay ? 'Pause' : 'Play'}
       >
         {isAutoPlay ? '⏸' : '▶'}
+      </button>
+
+      {/* Redirect button */}
+      <button
+        className="redirect-button"
+        onClick={handleRedirect}
+        title="Go back home"
+      >
+        ✕
       </button>
     </div>
   );
