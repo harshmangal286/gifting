@@ -18,6 +18,7 @@ import { PictureFrame } from "./models/pictureFrame";
 import { Fireworks } from "./components/Fireworks";
 import { BirthdayCard } from "./components/BirthdayCard";
 import { FallingPetals } from "./components/FallingPetals";
+import { DestinationCarousel } from "./components/DestinationCarousel";
 import { assetUrl } from "./utils/assetUrl";
 
 import "./App.css";
@@ -374,6 +375,7 @@ export default function App() {
   const [isCandleLit, setIsCandleLit] = useState(true);
   const [fireworksActive, setFireworksActive] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [showCarousel, setShowCarousel] = useState(false);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -387,6 +389,23 @@ export default function App() {
       audio.pause();
       backgroundAudioRef.current = null;
     };
+  }, []);
+
+  // Listen for video end to show carousel after 10 seconds
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleVideoEnd = () => {
+      const timer = setTimeout(() => {
+        setShowCarousel(true);
+      }, 10000);
+
+      return () => clearTimeout(timer);
+    };
+
+    video.addEventListener('ended', handleVideoEnd);
+    return () => video.removeEventListener('ended', handleVideoEnd);
   }, []);
 
   const playBackgroundMusic = useCallback(() => {
@@ -520,6 +539,11 @@ export default function App() {
   }, []);
 
   const isScenePlaying = hasStarted && sceneStarted;
+
+  // If carousel is active, show it full screen
+  if (showCarousel) {
+    return <DestinationCarousel />;
+  }
 
   return (
     <div className="App">
