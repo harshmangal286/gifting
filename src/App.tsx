@@ -580,13 +580,13 @@ export default function App() {
           <div className={`video-container ${showVideo ? 'show' : ''}`}>
             <video
               ref={videoRef}
-              preload="metadata"
+              preload="auto"
               playsInline
-              webkit-playsinline="true"
+              controls
               autoPlay
               muted={false}
             >
-              <source src={assetUrl("/friends_video.mp4")} type="video/mp4" />
+              <source src="/friends_video.mp4" type="video/mp4" />
             </video>
           </div>
           <div className={`birthday-message ${showVideo ? 'show' : ''}`}>
