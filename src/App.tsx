@@ -590,16 +590,11 @@ export default function App() {
       {showVideo && (
         <>
           <div className={`video-overlay ${showVideo ? 'show' : ''}`}>
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              webkit-playsinline="true"
+            <img
+              src="/disney.jpg"
+              alt="overlay"
               className="overlay-video"
-            >
-              <source src="/disney.mp4" type="video/mp4" />
-            </video>
+            />
           </div>
           <div className={`video-container ${showVideo ? 'show' : ''}`}>
             <video
